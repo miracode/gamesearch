@@ -1,0 +1,27 @@
+<div>
+    <h2>Results for:</h2>
+    <p>Title: {{ context.title }}
+    {% if context.platform %}
+    | Platform: {{ context.platform }}
+    {% endif %}
+    </p>
+
+
+<table>
+    <thead style="font-weight: bold">
+        <tr>
+            <td>Title</td>
+            <td>Platform</td>
+            <td>Relase Date<td>
+        </tr>
+    </thead>
+    <tbody>
+{% for game in results %}
+        <tr id={{ game.id }}>
+            <td>{{ game.title }}</td>
+            <td>{{ game.platform }}</td>
+            <td>{{ game.release_date }}</td>
+        </tr>
+{% endfor %}
+    <tbody>
+</table>
