@@ -3,7 +3,6 @@
 <form action="{% url 'results' %}" method="post">
     {% csrf_token %}
     {{ form }}
-    {{ form.errors }}
 <!--     <label name="Title" for='game_title'>*Title: </label>
     <input type='text' name='game_title'/>
     <label name="Title" for='game_platform'>Platform: </label>
