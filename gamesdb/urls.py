@@ -15,5 +15,5 @@ urlpatterns = patterns('',
     # url(r'^api/(?P<name>\w+)$',
     #     views.GameView.as_view()),
     # url(r'^api/$', 'search.views.api', name='api'),
-    url(r'^api$', views.GameView.as_view(), name='api'),
+    url(r'^api/?$', views.GameView.as_view(), name='api'),
 )
