@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     url(r'^$', 'search.views.index', name='home'),
     url(r'^results/', 'search.views.results', name='results'),
     # url(r'^games/$', views.GameView.as_view(), name='game-list')
-    url(r'^api/(?P<name>\w+)$',
-        views.GameView.as_view()),
-    url(r'^api/$', 'search.views.api', name='api'),
+    # url(r'^api/(?P<name>\w+)$',
+    #     views.GameView.as_view()),
+    # url(r'^api/$', 'search.views.api', name='api'),
+    url(r'^api$', views.GameView.as_view(), name='api'),
 )

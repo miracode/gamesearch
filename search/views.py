@@ -45,12 +45,17 @@ def api(request):
 
 class GameView(views.APIView):
 
-    def get(self, request, name, platform=None):
+    def get(self, request):
         """
         Get response from API
         """
         # get list of dictionaries of games
-        result = get_game_details(name)
+
+        name = self.request.QUERY_PARAMS.get('name', None)
+
+        game_id = self.request.QUERY_PARAMS.get('game_id', None)
+
+        result = get_game_details(name=name, game_id=game_id)
 
         # result = get_game_details(result)
 
@@ -62,7 +67,7 @@ class GameView(views.APIView):
         else:
             return Response(game_serializer.errors, status=400)
 
-    def post(self, request, name, format=None):
+    def post(self, request):
         """
         Give information that needs to be saved
         """
