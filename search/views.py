@@ -2,8 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import GameSearchForm
 from django.views.generic.edit import FormView
-from .forms import GameSearchForm
-from api_queries import get_games_list
+from api_queries import get_games_list, get_game_details
+from rest_framework import generics, views
+from .models import Game
+from serializers import GameSerializer
+
+from rest_framework.response import Response
+
+from copy import copy
 
 
 def index(request):
@@ -30,6 +36,57 @@ def results(request):
                  {'results': games_xml, 'context': context},
                  # content_type="application/xhtml+xml",
                  )
+
+
+def api(request):
+
+    return render(request, 'search/api.html')
+
+
+class GameView(views.APIView):
+
+    def get(self, request, name, platform=None):
+        """
+        Get response from API
+        """
+        # get list of dictionaries of games
+        result = get_game_details(name)
+
+        # result = get_game_details(result)
+
+        game_serializer = GameSerializer(data=result, many=True)
+
+        if game_serializer.is_valid():
+            return Response(game_serializer.data, status=200)
+
+        else:
+            return Response(game_serializer.errors, status=400)
+
+    def post(self, request, name, format=None):
+        """
+        Give information that needs to be saved
+        """
+
+        # nothing currently being saved.
+        request_data = copy(request.DATA)
+
+        print request_data
+        game_serializer = GameSerializer(data=request_data)
+
+        if game_serializer.is_valid():
+            print game_serializer.data
+            return Response(game_serializer.data, status=200)
+
+        else:
+            return Response(game_serializer.errors, status=400)
+
+# class GameView(generics.ListAPIView):
+
+#     model = Game
+#     serializer_class = GameSerializer
+
+#     def get_queryset(self):
+#         return Game.objects.all()
 
 
 # class GameSearchView(FormView):

@@ -38,8 +38,8 @@ def get_games_list(name, platform=None, genre=None):
         try:
             date = game.releasedate.string
         except:
-            date = None
-        d = {'id': game.id.string,
+            date = 'N/A'
+        d = {'game_id': game.id.string,
              'title': game.gametitle.string,
              'release_date': date,
              'platform': game.platform.string,
@@ -49,10 +49,77 @@ def get_games_list(name, platform=None, genre=None):
     # This could writes results into a file get_games_list_name_YYYYMMDD.txt
     # _write_results("get_games_list", content, name)
 
-    # Currently returns results as XML string.
-    # This can be altered to any other format
+    # Currently returns results as a list of dictionaries for each game
 
     return games
+
+
+def get_game_details(name, game_id=None, platform=None):
+    """
+    getGamesList(name [, platform, genre])
+
+    The GetGamesList API search returns a listing of games matched up with
+    loose search terms.
+
+    http://wiki.thegamesdb.net/index.php?title=GetGamesList
+    """
+
+    url = "http://thegamesdb.net/api/GetGame.php"
+
+    params = {"name": name}
+
+    if platform:
+        params["platform"] = platform
+
+    if game_id:
+        # This doesn't seem to be functional as of 2/10/2015
+        params["id"] = game_id
+
+    content, encoding = _fetch_url(url, params)
+
+    bsc = bs(content)
+
+    games = []
+    for game in bsc.find_all('game'):
+        try:
+            date = game.releasedate.string
+        except:
+            date = 'N/A'
+        try:
+            overview = game.overview.string
+        except:
+            overview = 'N/A'
+        d = {'game_id': game.id.string,
+             'title': game.gametitle.string,
+             'release_date': date,
+             'platform': game.platform.string,
+             'overview': overview
+             }
+        games.append(d)
+
+    # This could writes results into a file get_games_list_name_YYYYMMDD.txt
+    # _write_results("get_games_list", content, name)
+
+    # Currently returns results as a list of dictionaries for each game
+
+    return games
+
+
+def get_game_details_from_list(game_list):
+    """With a list of games and their ids, return details of the game"""
+
+    url = 'http://thegamesdb.net/api/GetGame.php'
+
+    for game in game_list:
+        content, encoding = _fetch_url(url, {'id': game['game_id']})
+        bsc = bs(content)
+        try:
+            game['overview'] = bsc.find('overview').string
+        except AttributeError:
+            game['overview'] = ''
+        print game
+
+    return game_list
 
 
 def get_platform_names():
