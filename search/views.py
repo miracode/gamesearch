@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import GameSearchForm
 from django.views.generic.edit import FormView
-from api_queries import get_games_list, get_game_details
+from api_queries import get_games_list, get_game_details, get_game_details_from_list
 from rest_framework import generics, views
 from .models import Game
 from serializers import GameSerializer
@@ -53,11 +53,12 @@ class GameView(views.APIView):
 
         name = self.request.QUERY_PARAMS.get('name', None)
 
-        game_id = self.request.QUERY_PARAMS.get('game_id', None)
+        # game_id = self.request.QUERY_PARAMS.get('game_id', None)
 
-        result = get_game_details(name=name, game_id=game_id)
+        # result = get_game_details(name=name, game_id=game_id)
 
-        # result = get_game_details(result)
+        result = get_game_details_from_list(get_games_list(name=name))
+
 
         game_serializer = GameSerializer(data=result
             , many=True

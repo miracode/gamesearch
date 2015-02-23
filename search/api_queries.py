@@ -125,11 +125,19 @@ def get_game_details_from_list(game_list):
     for game in game_list:
         content, encoding = _fetch_url(url, {'id': game['game_id']})
         bsc = bs(content)
+        base_url = bsc.baseimgurl.string
         try:
-            game['overview'] = bsc.find('overview').string
+            game['overview'] = bsc.overview.string
         except AttributeError:
-            game['overview'] = ''
-        print game
+            game['overview'] = 'N/A'
+        try:
+            game['cover_image'] = base_url + bsc.find('boxart', side="front").string
+        except AttributeError:
+            game['cover_image'] = 'N/A'
+        try:
+            game['rating'] = bsc.esrb.string
+        except AttributeError:
+            game['rating'] = 'N/A'
 
     return game_list
 
