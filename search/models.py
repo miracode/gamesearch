@@ -53,7 +53,7 @@ class Game(models.Model):
     # youtube = models.URLField(max_length=200, blank=True, null=True)
     # publisher = models.CharField(max_length=200, blank=True, null=True)
     # developer = models.CharField(max_length=200, blank=True, null=True)
-    rating = models.CharField(max_length=10, blank=True, null=True)
+    rating = models.CharField(max_length=200, blank=True, null=True)
     # images = models.ManyToManyField(Image, null=True, blank=True)
     cover_image = models.CharField(max_length=200, blank=True, null=True)
 

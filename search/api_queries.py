@@ -96,7 +96,7 @@ def get_game_details(name, game_id=None, platform=None):
         except:
             cover_image = 'N/A'
         try:
-            rating = game.rating.string
+            rating = game.esrb.string
         except:
             rating = 'N/A'
         d = {'game_id': game.id.string,
