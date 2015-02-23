@@ -59,7 +59,9 @@ class GameView(views.APIView):
 
         # result = get_game_details(result)
 
-        game_serializer = GameSerializer(data=result, many=True)
+        game_serializer = GameSerializer(data=result
+            , many=True
+            )
 
         if game_serializer.is_valid():
             return Response(game_serializer.data, status=200)

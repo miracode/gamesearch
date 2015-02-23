@@ -80,6 +80,8 @@ def get_game_details(name, game_id=None, platform=None):
     bsc = bs(content)
 
     games = []
+
+    base_url = bsc.baseimgurl.string
     for game in bsc.find_all('game'):
         try:
             date = game.releasedate.string
@@ -89,11 +91,21 @@ def get_game_details(name, game_id=None, platform=None):
             overview = game.overview.string
         except:
             overview = 'N/A'
+        try:
+            cover_image = base_url + game.find('boxart', side="front").string
+        except:
+            cover_image = 'N/A'
+        try:
+            rating = game.rating.string
+        except:
+            rating = 'N/A'
         d = {'game_id': game.id.string,
              'title': game.gametitle.string,
              'release_date': date,
              'platform': game.platform.string,
-             'overview': overview
+             'overview': overview,
+             'rating': rating,
+             'cover_image': cover_image,
              }
         games.append(d)
 
